@@ -1,6 +1,10 @@
 """
-Scrapes Portal Investidor to find all transactions of Tesouro Direto.
-REQUIRES A LIST OF PROTOCOLS TO RUN:
+Raspagem de dados do Portal Investidor para encontrar detalhes sobre operações
+feitas pelo Tesouro Direto.
+
+PRECISA DE UMA LISTA DE PROTOCOLOS PARA RODAR!!!!!!!
+
+Siga as instruções:
 
     1. Navegue a https://portalinvestidor.tesourodireto.com.br/Consulta
     2. Preencha os Filtros e clique em Aplicar
@@ -21,6 +25,8 @@ REQUIRES A LIST OF PROTOCOLS TO RUN:
 
         VER DETALHES
     9. Salve o arquivo e edite a varíavel logo abaixo para apontar para ele
+
+Antes de rodar, crie a pasta "td" no local onde vai rodar o scraper.
 """
 OPS_FILE = ""
 
