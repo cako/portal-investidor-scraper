@@ -1,7 +1,7 @@
 import json
 
-def asJson(handler):
+def as_json(handler):
     def loadJson(self, response):
-        handler(self, json.loads(response.text))
+        return handler(self, json.loads(response.text))
 
     return loadJson

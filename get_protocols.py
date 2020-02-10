@@ -2,7 +2,7 @@ import re
 import os
 import scrapy
 from tesouro_direto import response_handlers as TD
-from util import asJson
+from util import as_json
 
 
 BASE_URL = 'https://portalinvestidor.tesourodireto.com.br'
@@ -21,15 +21,11 @@ class PortalInvestidorSpider(scrapy.Spider):
             callback=self.after_login
         )
 
-    def after_login(self, response):
+    @TD.with_headers
+    def after_login(self, response, headers):
         if TD.authentication_failed(response):
             self.logger.error("Login failed")
             return
-
-        headers = dict()
-        token = response.css('#__AjaxAntiForgeryForm input')[0].attrib['value']
-        tokenName = response.css('#__AjaxAntiForgeryForm input')[0].attrib['name']
-        headers[tokenName] = token
 
         data = {
             'Operacao': '1',
@@ -46,7 +42,7 @@ class PortalInvestidorSpider(scrapy.Spider):
             callback=self.getProtocolList
         )
 
-    @asJson
+    @as_json
     def getProtocolList(self, jsonResponse):
         protocols = jsonResponse['Operacoes']
         pass
