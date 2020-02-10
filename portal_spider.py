@@ -33,6 +33,7 @@ OPS_FILE = ""
 import re
 import os
 import scrapy
+from bs4 import BeautifulSoup
 
 BASE_URL = 'https://portalinvestidor.tesourodireto.com.br'
 USER = os.environ["PORTAL_INVESTIDOR_USER"]
