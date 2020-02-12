@@ -35,6 +35,10 @@ class CEISpider(scrapy.Spider):
         yield scrapy.Request(BASE_URL + '/CEI_Responsivo/negociacao-de-ativos.aspx', callback=self.searchAtivos)
 
     def searchAtivos(self, response):
+        agentes = response.xpath('//select[contains(@name, "Agentes")]')
+        agentes = agentes.css('option::attr(value)').getall()[1:]
+        data_ini = response.css('#ctl00_ContentPlaceHolder1_lblPeriodoInicialBolsa::text').get()
+        data_fin = response.css('#ctl00_ContentPlaceHolder1_lblPeriodoFinalBolsa::text').get()
         self.count = self.count + 1
         data = {
             'ctl00$ContentPlaceHolder1$ddlAgentes': "386",
@@ -52,18 +56,16 @@ class CEISpider(scrapy.Spider):
             res = self.savedResponse
             cb = self.parseAtivos
             updatedFields = response.text.split('|')
-            data['__VIEWSTATE'] = updatedFields[23]
-            data['__EVENTVALIDATION'] = updatedFields[31]
-            data['__VIEWSTATEGENERATOR'] = updatedFields[27]
+            for (i, field) in enumerate(updatedFields):
+                if field in ['__VIEWSTATE', '__EVENTVALIDATION', '__VIEWSTATEGENERATOR']:
+                    data[field] = updatedFields[i+1]
 
         yield scrapy.FormRequest.from_response(res, callback=cb, formdata=data, dont_filter=True, headers=HEADERS)
 
     def parseAtivos(self, response):
         table = response.css('#ctl00_ContentPlaceHolder1_rptAgenteBolsa_ctl00_rptContaBolsa_ctl00_pnAtivosNegociados')[0]
-
-        parsed = []
         for row in table.css('tbody tr'):  # get each row (tr) of the table
-            parsed.append({
+            info = {
                 'Data do Negócio': row.xpath('td[1]/span//text()').get().strip(),
                 'Compra/Venda': row.xpath('td[2]/text()').get().strip(),
                 'Mercado': row.xpath('td[3]/text()').get().strip(),
@@ -73,6 +75,6 @@ class CEISpider(scrapy.Spider):
                 'Preço(R$)': row.xpath('td[8]/text()').get().strip(),
                 'Total(R$)': row.xpath('td[9]/text()').get().strip(),
                 'Fator de Cotação': row.xpath('td[10]/text()').get().strip()
-            })
-
-        print(parsed)
+            }
+            print(info)
+            yield info
