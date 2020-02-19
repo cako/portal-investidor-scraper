@@ -43,8 +43,8 @@ class CEISpider(scrapy.Spider):
         data = {
             'ctl00$ContentPlaceHolder1$ddlAgentes': "386",
             'ctl00$ContentPlaceHolder1$ddlContas': "0",
-            'ctl00$ContentPlaceHolder1$txtDataDeBolsa': "30/08/2018",
-            'ctl00$ContentPlaceHolder1$txtDataAteBolsa': "10/02/2020",
+            'ctl00$ContentPlaceHolder1$txtDataDeBolsa': data_ini,
+            'ctl00$ContentPlaceHolder1$txtDataAteBolsa': data_fin,
             '__ASYNCPOST': "true"
         }
 
